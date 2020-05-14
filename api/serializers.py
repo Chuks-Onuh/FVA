@@ -44,6 +44,7 @@ class MenuSerializer(serializers.ModelSerializer):
             'dateTimeCreated', 
             'isRecurring', 
             'frequencyOfReocurence', 
+            'vendorId'
         )
 
 
@@ -59,9 +60,9 @@ class OrderSerializer(serializers.ModelSerializer):
             'amountDue', 
             'amountPaid', 
             'amountOutstanding', 
-            'vendor', 
+            'vendorId', 
             'orderStatus', 
-            'menu', 
+            'menuId', 
         )
 
 
@@ -85,6 +86,7 @@ class NotificationSerializer(serializers.ModelSerializer):
             'dateTimeCreated', 
             'subjectUser', 
             'messageStatus', 
+            'orderId'
         )
 
 
