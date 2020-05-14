@@ -12,7 +12,7 @@ class VendorAdminForm(forms.ModelForm):
 class VendorAdmin(admin.ModelAdmin):
     form = VendorAdminForm
     list_display = ['businessname', 'email', 'phoneNumber', 'dateTimeCreated']
-    readonly_fields = ['businessname', 'email', 'phoneNumber', 'dateTimeCreated']
+    #readonly_fields = ['businessname', 'email', 'phoneNumber', 'dateTimeCreated']
 
 admin.site.register(Vendor, VendorAdmin)
 
@@ -27,7 +27,7 @@ class CustomerAdminForm(forms.ModelForm):
 class CustomerAdmin(admin.ModelAdmin):
     form = CustomerAdminForm
     list_display = ['firstname', 'lastname', 'email', 'phoneNumber', 'dateTimeCreated', 'amountOutstanding']
-    readonly_fields = ['firstname', 'lastname', 'email', 'phoneNumber', 'dateTimeCreated', 'amountOutstanding']
+    #readonly_fields = ['firstname', 'lastname', 'email', 'phoneNumber', 'dateTimeCreated', 'amountOutstanding']
 
 admin.site.register(Customer, CustomerAdmin)
 
@@ -42,7 +42,7 @@ class MenuAdminForm(forms.ModelForm):
 class MenuAdmin(admin.ModelAdmin):
     form = MenuAdminForm
     list_display = ['name', 'description', 'price', 'quantity', 'dateTimeCreated', 'isRecurring', 'frequencyOfReocurence']
-    readonly_fields = ['name', 'description', 'price', 'quantity', 'dateTimeCreated', 'isRecurring', 'frequencyOfReocurence']
+    #readonly_fields = ['name', 'description', 'price', 'quantity', 'dateTimeCreated', 'isRecurring', 'frequencyOfReocurence']
 
 admin.site.register(Menu, MenuAdmin)
 
@@ -56,8 +56,8 @@ class OrderAdminForm(forms.ModelForm):
 
 class OrderAdmin(admin.ModelAdmin):
     form = OrderAdminForm
-    list_display = ['description', 'itemsOrdered', 'dateAndTimeOfOrder', 'amountDue', 'amountPaid', 'amountOutstanding', 'vendor', 'orderStatus', 'menu']
-    readonly_fields = ['description', 'itemsOrdered', 'dateAndTimeOfOrder', 'amountDue', 'amountPaid', 'amountOutstanding', 'vendor', 'orderStatus', 'menu']
+    list_display = ['description', 'itemsOrdered', 'dateAndTimeOfOrder', 'amountDue', 'amountPaid', 'amountOutstanding', 'vendorId', 'orderStatus', 'menuId']
+    #readonly_fields = ['description', 'itemsOrdered', 'dateAndTimeOfOrder', 'amountDue', 'amountPaid', 'amountOutstanding', 'vendorId', 'orderStatus', 'menuId']
 
 admin.site.register(Order, OrderAdmin)
 
@@ -86,8 +86,8 @@ class NotificationAdminForm(forms.ModelForm):
 
 class NotificationAdmin(admin.ModelAdmin):
     form = NotificationAdminForm
-    list_display = ['message', 'dateTimeCreated','orderId' , 'subjectUserId', 'messageStatus']
-    readonly_fields = ['message', 'dateTimeCreated', 'subjectUserId', 'messageStatus']
+    list_display = ['message', 'dateTimeCreated','orderId' , 'subjectUser', 'messageStatus']
+    #readonly_fields = ['message', 'dateTimeCreated', 'subjectUser', 'messageStatus']
 
 admin.site.register(Notification, NotificationAdmin)
 
