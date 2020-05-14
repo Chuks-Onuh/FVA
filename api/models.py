@@ -69,6 +69,10 @@ class Customer(models.Model):
 
     def get_update_url(self):
         return reverse('api_customer_update', args=(self.pk,))
+    
+    
+    def __str__(self):
+        return self.firstname +  self. lastname
 
 
 class Menu(models.Model):
@@ -83,7 +87,7 @@ class Menu(models.Model):
     frequencyOfReocurence = models.CharField(max_length=30)
 
      # Relationship Fields
-    vendor = models.ForeignKey(
+    vendorId = models.ForeignKey(
         'api.Vendor',
         on_delete=models.CASCADE
     )
@@ -100,6 +104,9 @@ class Menu(models.Model):
 
     def get_update_url(self):
         return reverse('api_menu_update', args=(self.pk,))
+    
+    def __str__(self):
+        return self.name
 
 
 class Order(models.Model):
@@ -113,14 +120,11 @@ class Order(models.Model):
     # Fields
     description = models.TextField(max_length=255)
     itemsOrdered = ArrayField(models.CharField(max_length=50), blank=True)
-    #itemsOrdered = ArrayField(populate_from='name', blank=True)
     dateAndTimeOfOrder = models.DateTimeField(auto_now_add=True, editable=True)
     amountDue = models.IntegerField()
     amountPaid = models.IntegerField()
     amountOutstanding = models.IntegerField()
-    #vendor = models.CharField(max_length=30)
-    orderStatus = models.IntegerField(choices=STATUS_CHOICES, default= 'Select')
-    #menu = models.CharField(max_length=30)
+    orderStatus = models.IntegerField(choices=STATUS_CHOICES)
 
     # Relationship Fields
     customerId = models.ForeignKey(
@@ -181,8 +185,8 @@ class Notification(models.Model):
         'api.Order',
         on_delete=models.CASCADE
     )
-    subjectUserId = models.ForeignKey(
-        'api.Customer',
+    subjectUser = models.ForeignKey(
+        'api.Vendor',
         on_delete = models.CASCADE
     )
     messageStatus = models.ForeignKey(
@@ -222,5 +226,8 @@ class MessageStatus(models.Model):
 
     def get_update_url(self):
         return reverse('api_messagestatus_update', args=(self.pk,))
+    
+    def __str__(self):
+        return self.name
 
 
