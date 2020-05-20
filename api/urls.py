@@ -1,5 +1,14 @@
 from django.urls import path, include
 from . import views
+from .views import authuser_view, api_view
+
+
+app_name = 'api'
+
+urlpatterns = [
+    
+    path('fva/register', authuser_view, name = 'register'),
+]
 
 urlpatterns = (
     # urls for Vendor
@@ -49,4 +58,19 @@ urlpatterns += (
     path('fva/messagestatus/create/', views.MessageStatusCreateView.as_view(), name='fva_messagestatus_create'),
     path('fva/messagestatus/rud/<int:pk>/', views.MessageStatusRUDView.as_view(), name='fva_messagestatus_detail'),
 )
+
+urlpatterns += (
+    # urls for Cart
+    path('fva/cart/', views.CartListView.as_view(), name='fva_cart_list'),
+    path('fva/cart/create/', views.CartCreateView.as_view(), name='fva_cart_create'),
+    path('fva/cart/rud/<int:pk>/', views.CartRUDView.as_view(), name='fva_cart_detail'),
+)
+
+urlpatterns += (
+    # urls for BillingAddress
+    path('fva/billingaddress/', views.BillingAddressListView.as_view(), name='fva_billingaddress_list'),
+    path('fva/billingaddress/create/', views.BillingAddressCreateView.as_view(), name='fva_billingaddress_create'),
+    path('fva/billingaddress/rud/<int:pk>/', views.BillingAddressRUDView.as_view(), name='fva_billingaddress_detail'),
+)
+
 
