@@ -1,5 +1,5 @@
 from django.urls import reverse
-from django_extensions.db.fields import AutoSlugField
+#from django_extensions.db.fields import AutoSlugField
 from django.contrib.postgres.fields import ArrayField
 from django.db.models import BooleanField
 from django.db.models import CharField
@@ -12,18 +12,36 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
 from django.contrib.auth import models as auth_models
-from django.db import models as models
+from django.db import models
 from django_extensions.db import fields as extension_fields
-from phonenumber_field.modelfields import PhoneNumberField
+from django.shortcuts import get_object_or_404
+from django.contrib import messages
 from phone_field import PhoneField
+from django.contrib.auth.models import AbstractUser
+from django.utils.translation import ugettext_lazy as _
+from .managers import CustomUserManager
 
 
+class AuthUser(AbstractUser):
+    username =  None
+    email = models.EmailField(_('email address'), unique=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+    
+    #exclude = ('username',) 
+    
+    objects = CustomUserManager()
+    dateTimeCreated = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email
 
 
 class Vendor(models.Model):
 
     # Fields
-    businessname = models.CharField(max_length=255)
+    businessname = models.CharField(max_length=100)
     email = models.EmailField(unique = True, blank = False)
     phoneNumber = PhoneField(blank=True, help_text='Contact phone number')
     dateTimeCreated = models.DateTimeField(auto_now_add=True)
@@ -49,12 +67,12 @@ class Vendor(models.Model):
 class Customer(models.Model):
 
     # Fields
-    firstname = models.CharField(max_length=255)
-    lastname = models.CharField(max_length=255)
+    firstname = models.CharField(max_length=100)
+    lastname = models.CharField(max_length=100)
     email = models.EmailField(unique = True, blank = False)
     phoneNumber = PhoneField(blank=True, help_text='Contact phone number')
     dateTimeCreated = models.DateTimeField(auto_now_add=True)
-    amountOutstanding = models.IntegerField()
+    amountOutstanding = models.FloatField()
 
 
     class Meta:
@@ -78,15 +96,15 @@ class Customer(models.Model):
 class Menu(models.Model):
 
     # Fields
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=100)
     description = models.TextField(blank=True) 
-    price = models.IntegerField()
+    price = models.FloatField()
     quantity = models.IntegerField()
     dateTimeCreated = models.DateTimeField(auto_now_add=True, editable=True)
     isRecurring = models.BooleanField()
     frequencyOfReocurence = models.CharField(max_length=30)
 
-     # Relationship Fields
+    # Relationship Fields
     vendorId = models.ForeignKey(
         'api.Vendor',
         on_delete=models.CASCADE
@@ -105,8 +123,8 @@ class Menu(models.Model):
     def get_update_url(self):
         return reverse('api_menu_update', args=(self.pk,))
     
-    def __str__(self):
-        return self.name
+    #def __int__(self):
+        return self.pk
 
 
 class Order(models.Model):
@@ -116,16 +134,15 @@ class Order(models.Model):
     (2, 'Delivered'),
     (3, 'Cancelled'),
     )
-
     # Fields
-    description = models.TextField(max_length=255)
+    description = models.TextField(max_length=100)
     itemsOrdered = ArrayField(models.CharField(max_length=50), blank=True)
     dateAndTimeOfOrder = models.DateTimeField(auto_now_add=True, editable=True)
-    amountDue = models.IntegerField()
-    amountPaid = models.IntegerField()
-    amountOutstanding = models.IntegerField()
+    amountDue = models.FloatField()
+    amountPaid = models.FloatField()
+    amountOutstanding = models.FloatField()
     orderStatus = models.IntegerField(choices=STATUS_CHOICES)
-
+    
     # Relationship Fields
     customerId = models.ForeignKey(
         'api.Customer',
@@ -152,6 +169,15 @@ class Order(models.Model):
 
     def get_update_url(self):
         return reverse('api_order_update', args=(self.pk,))
+    
+    # get total for menu in the cart
+    
+    def get_total(self):
+        total = 0
+        for order_item in self.itemsOrdered.all():
+            total += order_item.get_total()
+        return total
+    
 
 
 class OrderStatus(models.Model):
@@ -229,5 +255,69 @@ class MessageStatus(models.Model):
     
     def __str__(self):
         return self.name
+    
+    
+    # Cart model
+    
+class Cart(models.Model):  
+    # Fields
+    quantity = models.IntegerField(default=1)
+    dateTimeCreated = models.DateTimeField(auto_now_add=True)
+        
+    # Relationship Fields
+    itemsOrdered = models.ManyToManyField(
+        Order
+        )
+    def __str__(self):
+        return f'{self.quantity} of {self.itemsOrdered.name}'
+        
+    class Meta:
+        ordering = ('-pk',)
+
+    def __unicode__(self):
+        return u'%s' % self.pk
+
+    def get_absolute_url(self):
+        return reverse('api_cart_detail', args=(self.pk,))
+
+    def get_update_url(self):
+        return reverse('api_cart_update', args=(self.pk,))
+    
+    # Getting the total price of items in the cart
+    
+    def get_total(self):
+        total = itemsOrdered.amountDue * self.quantity
+        float_total = float('{0:.2f}'.format(total))
+        return float_total
 
 
+# Billing Address model
+
+class BillingAddress(models.Model):
+    # Fields
+    
+    # Relationship Fields
+    name = models.ForeignKey('api.Customer',
+    on_delete=models.CASCADE
+    )
+    itemsOrdered = models.ManyToManyField(
+    Order
+    )
+    
+    address = models.CharField(max_length = 100)
+    zipcode = models.CharField(max_length = 50)
+    city = models.CharField(max_length = 30)
+    landmark = models.CharField(max_length = 50)
+    
+    
+    class Meta:
+        verbose_name_plural = "Shipping Addresses"
+
+    def __unicode__(self):
+        return u'%s' % self.pk
+
+    def get_absolute_url(self):
+        return reverse('api_billingaddress_detail', args=(self.pk,))
+
+    def get_update_url(self):
+        return reverse('api_billingaddress_update', args=(self.pk,))
