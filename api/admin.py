@@ -1,6 +1,30 @@
 from django.contrib import admin
 from django import forms
-from .models import Vendor, Customer, Menu, Order, OrderStatus, Notification, MessageStatus
+from .models import (
+    Vendor, 
+    Customer, 
+    Menu, 
+    Order, 
+    OrderStatus, 
+    Notification, 
+    MessageStatus, 
+    Cart, 
+    BillingAddress, 
+    AuthUser
+    
+)
+
+class AuthAdminForm(forms.ModelForm):
+    
+    class Meta:
+        model = AuthUser
+        fields = '__all__'
+        
+class AuthUserAdmin(admin.ModelAdmin):
+    form = AuthAdminForm
+    list_display = ['email', 'password', 'dateTimeCreated']
+    
+admin.site.register(AuthUser, AuthUserAdmin)
 
 class VendorAdminForm(forms.ModelForm):
 
@@ -12,7 +36,6 @@ class VendorAdminForm(forms.ModelForm):
 class VendorAdmin(admin.ModelAdmin):
     form = VendorAdminForm
     list_display = ['businessname', 'email', 'phoneNumber', 'dateTimeCreated']
-    #readonly_fields = ['businessname', 'email', 'phoneNumber', 'dateTimeCreated']
 
 admin.site.register(Vendor, VendorAdmin)
 
@@ -27,8 +50,8 @@ class CustomerAdminForm(forms.ModelForm):
 class CustomerAdmin(admin.ModelAdmin):
     form = CustomerAdminForm
     list_display = ['firstname', 'lastname', 'email', 'phoneNumber', 'dateTimeCreated', 'amountOutstanding']
-    #readonly_fields = ['firstname', 'lastname', 'email', 'phoneNumber', 'dateTimeCreated', 'amountOutstanding']
-
+    
+    
 admin.site.register(Customer, CustomerAdmin)
 
 
@@ -41,8 +64,8 @@ class MenuAdminForm(forms.ModelForm):
 
 class MenuAdmin(admin.ModelAdmin):
     form = MenuAdminForm
-    list_display = ['name', 'description', 'price', 'quantity', 'dateTimeCreated', 'isRecurring', 'frequencyOfReocurence']
-    #readonly_fields = ['name', 'description', 'price', 'quantity', 'dateTimeCreated', 'isRecurring', 'frequencyOfReocurence']
+    list_display = ['name', 'description', 'price', 'quantity', 'dateTimeCreated', 
+                    'isRecurring', 'frequencyOfReocurence']
 
 admin.site.register(Menu, MenuAdmin)
 
@@ -56,8 +79,8 @@ class OrderAdminForm(forms.ModelForm):
 
 class OrderAdmin(admin.ModelAdmin):
     form = OrderAdminForm
-    list_display = ['description', 'itemsOrdered', 'dateAndTimeOfOrder', 'amountDue', 'amountPaid', 'amountOutstanding', 'vendorId', 'orderStatus', 'menuId']
-    #readonly_fields = ['description', 'itemsOrdered', 'dateAndTimeOfOrder', 'amountDue', 'amountPaid', 'amountOutstanding', 'vendorId', 'orderStatus', 'menuId']
+    list_display = ['description', 'itemsOrdered', 'dateAndTimeOfOrder', 'amountDue', 
+                'amountPaid', 'amountOutstanding', 'vendorId', 'orderStatus', 'menuId']
 
 admin.site.register(Order, OrderAdmin)
 
@@ -87,7 +110,7 @@ class NotificationAdminForm(forms.ModelForm):
 class NotificationAdmin(admin.ModelAdmin):
     form = NotificationAdminForm
     list_display = ['message', 'dateTimeCreated','orderId' , 'subjectUser', 'messageStatus']
-    #readonly_fields = ['message', 'dateTimeCreated', 'subjectUser', 'messageStatus']
+    
 
 admin.site.register(Notification, NotificationAdmin)
 
@@ -105,5 +128,33 @@ class MessageStatusAdmin(admin.ModelAdmin):
     readonly_fields = ['name']
 
 admin.site.register(MessageStatus, MessageStatusAdmin)
+
+
+class CartAdminForm(forms.ModelForm):
+    
+    class Meta:
+        model = Cart
+        fields = '__all__'
+        
+class CartAdmin(admin.ModelAdmin):
+    
+    form = CartAdminForm
+    list_dispaly = ['itemsOrdered', 'quantity', 'dateTimeCreated']
+    
+admin.site.register(Cart, CartAdmin)
+
+
+class BillingAddressAdminForm(forms.ModelForm):
+    
+    class Meta:
+        model = BillingAddress
+        fields = '__all__'
+        
+class BillingAddressAdmin(admin.ModelAdmin):
+    
+    form = BillingAddressAdminForm
+    list_dispaly = ['address', 'zipcode', 'city', 'landmark', 'name']
+    
+admin.site.register(BillingAddress, BillingAddressAdmin)
 
 
