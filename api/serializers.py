@@ -1,10 +1,48 @@
-from .models import Vendor, Customer, Menu, Order, Notification, OrderStatus, MessageStatus
-
+from .models import (
+        Vendor, 
+        Customer, 
+        Menu, 
+        Order, 
+        Notification, 
+        OrderStatus, 
+        MessageStatus, 
+        Cart, 
+        BillingAddress, 
+        AuthUser
+)
 from rest_framework import serializers
 
 
-class VendorSerializer(serializers.ModelSerializer):
 
+class AuthUserSerializer(serializers.ModelSerializer):
+    password2 = serializers.CharField(style = {'input_type': 'password'}, write_only = True)
+    class Meta:
+        model = AuthUser
+        fields = ('pk',
+                'email', 
+                'password',
+                'password2',
+                'dateTimeCreated',
+                )
+        extra_kwargs = { 'password': {'write_only': True} }
+        
+    def save(self):
+        authuser = AuthUser(
+                email = self.validated_data['email']
+        )
+        password = self.validated_data['password']
+        password2 = self.validated_data['password2']
+        
+        if password != password2:
+            raise serializers.ValidationError({'password': 'Password must match.'})
+        authuser.set_password(password)
+        authuser.save()
+        return authuser
+        
+        
+        
+class VendorSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Vendor
         fields = (
@@ -98,5 +136,27 @@ class MessageStatusSerializer(serializers.ModelSerializer):
             'pk', 
             'name', 
         )
+        
+class CartSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Cart
+        fields = (
+            'pk',
+            'quantity',
+            'dateTimeCreated',
+            'itemsOrdered',     
+        )
 
+class BillingAddressSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = BillingAddress
+        fields = (
+            'address',
+            'zipcode',
+            'city',
+            'landmark',
+            'name',
+        )
 
