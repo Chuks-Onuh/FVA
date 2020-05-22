@@ -22,12 +22,12 @@ class AuthUserSerializer(serializers.ModelSerializer):
                 'email', 
                 'password',
                 'password2',
-                'dateTimeCreated',
+                'dateTimeCreated'
                 )
         extra_kwargs = { 'password': {'write_only': True} }
         
     def save(self):
-        authuser = AuthUser(
+        user = AuthUser(
                 email = self.validated_data['email']
         )
         password = self.validated_data['password']
@@ -35,11 +35,9 @@ class AuthUserSerializer(serializers.ModelSerializer):
         
         if password != password2:
             raise serializers.ValidationError({'password': 'Password must match.'})
-        authuser.set_password(password)
-        authuser.save()
-        return authuser
-        
-        
+        user.set_password(password)
+        user.save()
+        return user
         
 class VendorSerializer(serializers.ModelSerializer):
     
@@ -92,13 +90,14 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = (
             'pk', 
+            'customerId',
+            'vendorId',
             'description', 
             'itemsOrdered', 
             'dateAndTimeOfOrder', 
             'amountDue', 
             'amountPaid', 
-            'amountOutstanding', 
-            'vendorId', 
+            'amountOutstanding',  
             'orderStatus', 
             'menuId', 
         )
