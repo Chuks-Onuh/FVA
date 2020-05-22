@@ -1,14 +1,10 @@
 from django.urls import path, include
 from . import views
 from .views import authuser_view, api_view
+from .views import CustomerCreateView
 
 
 app_name = 'api'
-
-urlpatterns = [
-    
-    path('fva/register', authuser_view, name = 'register'),
-]
 
 urlpatterns = (
     # urls for Vendor
