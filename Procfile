@@ -1,1 +1,1 @@
-web:gunicorn food_vendor_api.wsgi
+web: gunicorn --pythonpath food_vendor_api.wsgi
