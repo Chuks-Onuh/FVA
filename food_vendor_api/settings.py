@@ -105,24 +105,14 @@ WSGI_APPLICATION = 'food_vendor_api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-# DATABASES = {
-# 'default': {
-# 'ENGINE': 'django.db.backends.postgresql',
-# 'NAME': 'wnjifjru',
-# 'USER': 'wnjifjru',
-# 'PASSWORD': 'nhbwqSSdorOClV7EzBJrjAuVifFW1Yn9',
-# 'HOST': 'drona.db.elephantsql.com',
-# 'PORT': '5432',
-# }
-# }
 DATABASES = {
 'default': {
 'ENGINE': 'django.db.backends.postgresql',
-'NAME': 'grqytjgc',
-'USER': 'grqytjgc',
-'PASSWORD': 'nB6ndgJGyApFdYr8mRJZCPXyGxHOtnPp',
-'HOST': 'raja.db.elephantsql.com',
-'PORT': '5432',
+'NAME': 'FoodVendorApp',
+'USER': 'postgres',
+'PASSWORD': 'chimaobi1122',
+'HOST': 'localhost',
+'PORT': '8000',
 }
 }
 
