@@ -17,29 +17,31 @@ from django_extensions.db import fields as extension_fields
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from phone_field import PhoneField
+import jsonfield
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
 from .managers import CustomUserManager
 
 
 class AuthUser(AbstractUser):
+    
+    # Fields
     username =  None
     email = models.EmailField(_('email address'), unique=True)
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     
-    #exclude = ('username',) 
-    
-    objects = CustomUserManager()
     dateTimeCreated = models.DateTimeField(auto_now_add=True)
-
+    objects = CustomUserManager()
     def __str__(self):
         return self.email
+    
+    def get_absolute_url(self):
+        return reverse('user_detail', kwargs={'pk': self.pk})
 
 
 class Vendor(models.Model):
-
+    
     # Fields
     businessname = models.CharField(max_length=100)
     email = models.EmailField(unique = True, blank = False)
@@ -81,12 +83,6 @@ class Customer(models.Model):
     def __unicode__(self):
         return u'%s' % self.pk
 
-    def get_absolute_url(self):
-        return reverse('api_customer_detail', args=(self.pk,))
-
-
-    def get_update_url(self):
-        return reverse('api_customer_update', args=(self.pk,))
     
     
     def __str__(self):
@@ -101,14 +97,13 @@ class Menu(models.Model):
     price = models.FloatField()
     quantity = models.IntegerField()
     dateTimeCreated = models.DateTimeField(auto_now_add=True, editable=True)
-    isRecurring = models.BooleanField()
-    frequencyOfReocurence = models.CharField(max_length=30)
-
     # Relationship Fields
     vendorId = models.ForeignKey(
         'api.Vendor',
         on_delete=models.CASCADE
     )
+    isRecurring = models.BooleanField()
+    frequencyOfReocurence = models.CharField(max_length=30)
 
     class Meta:
         ordering = ('-pk',)
@@ -117,14 +112,12 @@ class Menu(models.Model):
         return u'%s' % self.pk
 
     def get_absolute_url(self):
+        """Returns the url to access a detailed menu"""
         return reverse('api_menu_detail', args=(self.pk,))
 
 
     def get_update_url(self):
         return reverse('api_menu_update', args=(self.pk,))
-    
-    #def __int__(self):
-        return self.pk
 
 
 class Order(models.Model):
@@ -135,13 +128,6 @@ class Order(models.Model):
     (3, 'Cancelled'),
     )
     # Fields
-    description = models.TextField(max_length=100)
-    itemsOrdered = ArrayField(models.CharField(max_length=50), blank=True)
-    dateAndTimeOfOrder = models.DateTimeField(auto_now_add=True, editable=True)
-    amountDue = models.FloatField()
-    amountPaid = models.FloatField()
-    amountOutstanding = models.FloatField()
-    orderStatus = models.IntegerField(choices=STATUS_CHOICES)
     
     # Relationship Fields
     customerId = models.ForeignKey(
@@ -152,11 +138,25 @@ class Order(models.Model):
         'api.Vendor',
         on_delete=models.CASCADE
     )
+    description = models.TextField(max_length=100)
+    itemsOrdered = ArrayField(
+    ArrayField(
+        models.CharField(max_length=10, blank=True)
+    ),
+    size=1
+)
+    itemsOrdered = ArrayField(models.CharField(max_length=50), blank=True)
+    amountDue = models.FloatField()
+    amountPaid = models.FloatField()
+    amountOutstanding = models.FloatField()
+    orderStatus = models.IntegerField(choices=STATUS_CHOICES)
+    # Relationship Field
     menuId = models.ForeignKey(
         'api.Menu',
         on_delete=models.CASCADE
     )
-
+    dateAndTimeOfOrder = models.DateTimeField(auto_now_add=True, editable=True)
+    
     class Meta:
         ordering = ('-pk',)
 
@@ -164,19 +164,22 @@ class Order(models.Model):
         return u'%s' % self.pk
 
     def get_absolute_url(self):
+        """Returns the url to access a detailed order"""
         return reverse('api_order_detail', args=(self.pk,))
 
 
     def get_update_url(self):
         return reverse('api_order_update', args=(self.pk,))
     
-    # get total for menu in the cart
+    # get total itemsOrdered
     
     def get_total(self):
-        total = 0
-        for order_item in self.itemsOrdered.all():
-            total += order_item.get_total()
-        return total
+        total = self.amountDue + self.amountPaid + self.amountOutstanding
+        amountOutstanding = self.amountDue - self.amountPaid
+        if total:
+            return 'Total amount for your purchased items is  {}'.format(amountDue)
+        else:
+            return 'Your amount outstanding is {}'.format(amountOutstanding)
     
 
 
@@ -193,6 +196,7 @@ class OrderStatus(models.Model):
         return u'%s' % self.pk
 
     def get_absolute_url(self):
+        """Returns the url to access a detailed order_status"""
         return reverse('api_orderstatus_detail', args=(self.pk,))
 
 
@@ -203,23 +207,24 @@ class OrderStatus(models.Model):
 class Notification(models.Model):
 
     # Fields
-    message = models.TextField()
-    dateTimeCreated = models.DateTimeField(auto_now_add=True, editable=True)
     
     # Relationship Fields
-    orderId = models.ForeignKey(
-        'api.Order',
-        on_delete=models.CASCADE
-    )
     subjectUser = models.ForeignKey(
         'api.Vendor',
         on_delete = models.CASCADE
     )
+    orderId = models.ForeignKey(
+        'api.Order',
+        on_delete=models.CASCADE
+    )
+    message = models.TextField()
+    dateTimeCreated = models.DateTimeField(auto_now_add=True, editable=True)
+    # Relationship Field
     messageStatus = models.ForeignKey(
         'api.MessageStatus',
         on_delete=models.CASCADE
     )
-
+    
     class Meta:
         ordering = ('-pk',)
 
@@ -227,6 +232,7 @@ class Notification(models.Model):
         return u'%s' % self.pk
 
     def get_absolute_url(self):
+        """Returns the url to access a detailed notification"""
         return reverse('api_notification_detail', args=(self.pk,))
 
 
@@ -238,8 +244,7 @@ class MessageStatus(models.Model):
 
     # Fields
     name = models.CharField(max_length=255)
-
-
+    
     class Meta:
         ordering = ('-pk',)
 
@@ -247,17 +252,14 @@ class MessageStatus(models.Model):
         return u'%s' % self.pk
 
     def get_absolute_url(self):
+        """Returns the url to access a detailed message_status"""
         return reverse('api_messagestatus_detail', args=(self.pk,))
-
 
     def get_update_url(self):
         return reverse('api_messagestatus_update', args=(self.pk,))
     
     def __str__(self):
         return self.name
-    
-    
-    # Cart model
     
 class Cart(models.Model):  
     # Fields
@@ -275,6 +277,7 @@ class Cart(models.Model):
         ordering = ('-pk',)
 
     def __unicode__(self):
+        """Returns the url to access a detailed cart"""
         return u'%s' % self.pk
 
     def get_absolute_url(self):
@@ -289,9 +292,7 @@ class Cart(models.Model):
         total = itemsOrdered.amountDue * self.quantity
         float_total = float('{0:.2f}'.format(total))
         return float_total
-
-
-# Billing Address model
+        return 'paid'
 
 class BillingAddress(models.Model):
     # Fields
@@ -317,6 +318,7 @@ class BillingAddress(models.Model):
         return u'%s' % self.pk
 
     def get_absolute_url(self):
+        """Returns the url to access a detailed billing address"""
         return reverse('api_billingaddress_detail', args=(self.pk,))
 
     def get_update_url(self):
