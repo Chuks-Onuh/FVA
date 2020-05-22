@@ -10,8 +10,7 @@ from .models import (
     MessageStatus, 
     Cart, 
     BillingAddress, 
-    AuthUser
-    
+    AuthUser   
 )
 
 class AuthAdminForm(forms.ModelForm):
