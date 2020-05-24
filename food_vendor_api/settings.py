@@ -109,7 +109,7 @@ WSGI_APPLICATION = 'food_vendor_api.wsgi.application'
 DATABASES = {
 'default': {
 'ENGINE': 'django.db.backends.postgresql',
-'NAME': 'FoodVendorApp',
+'NAME': 'FVAPI',
 'USER': 'postgres',
 'PASSWORD': 'chimaobi1122',
 'HOST': 'localhost',
