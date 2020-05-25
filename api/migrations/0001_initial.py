@@ -42,6 +42,7 @@ class Migration(migrations.Migration):
                 ('dateTimeCreated', models.DateTimeField(auto_now_add=True)),
                 ('isRecurring', models.BooleanField()),
                 ('frequencyOfReocurence', models.CharField(max_length=30)),
+                ('VendorId', models.ForeignKey('api.Vendor', on_delete=models.CASCADE))
             ],
             options={
                 'ordering': ('-pk',),
