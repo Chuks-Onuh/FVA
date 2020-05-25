@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
                 ('dateTimeCreated', models.DateTimeField(auto_now_add=True)),
                 ('isRecurring', models.BooleanField()),
                 ('frequencyOfReocurence', models.CharField(max_length=30)),
-                ('VendorId', models.ForeignKey('api.Vendor', on_delete=models.CASCADE))
+                ('vendorId', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.Vendor')),
             ],
             options={
                 'ordering': ('-pk',),
