@@ -119,11 +119,11 @@ class NotificationSerializer(serializers.ModelSerializer):
         model = Notification
         fields = (
             'pk', 
+            'subjectUser',
+            'order',
             'message', 
             'dateTimeCreated', 
-            'subjectUser', 
             'messageStatus', 
-            'orderId'
         )
 
 
