@@ -214,7 +214,7 @@ class Notification(models.Model):
         on_delete = models.CASCADE
     )
     orderId = models.ForeignKey(
-        'api.Order',
+        Order,
         on_delete=models.CASCADE
     )
     message = models.TextField()
@@ -292,7 +292,7 @@ class Cart(models.Model):
         total = itemsOrdered.amountDue * self.quantity
         float_total = float('{0:.2f}'.format(total))
         return float_total
-        return 'paid'
+        print('paid')
 
 class BillingAddress(models.Model):
     # Fields
