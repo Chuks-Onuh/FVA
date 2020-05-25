@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('auth', '0011_update_proxy_permissions'),
-        ('Vendor', '__first__'),
+        ('api', '__first__'),
     ]
 
     operations = [
