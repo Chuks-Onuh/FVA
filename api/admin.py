@@ -64,7 +64,7 @@ class MenuAdminForm(forms.ModelForm):
 class MenuAdmin(admin.ModelAdmin):
     form = MenuAdminForm
     list_display = ['name', 'description', 'price', 'quantity', 'dateTimeCreated', 
-                    'isRecurring', 'frequencyOfReocurence']
+                    'isRecurring', 'frequencyOfReocurence', 'vendorId']
 
 admin.site.register(Menu, MenuAdmin)
 
