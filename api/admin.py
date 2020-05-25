@@ -107,7 +107,7 @@ class NotificationAdminForm(forms.ModelForm):
 
 class NotificationAdmin(admin.ModelAdmin):
     form = NotificationAdminForm
-    list_display = ['message', 'dateTimeCreated','orderId' , 'subjectUser', 'messageStatus']
+    list_display = ['subjectUser','order', 'message', 'dateTimeCreated' ,  'messageStatus']
     
 
 admin.site.register(Notification, NotificationAdmin)
