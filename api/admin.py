@@ -94,7 +94,6 @@ class OrderStatusAdminForm(forms.ModelForm):
 class OrderStatusAdmin(admin.ModelAdmin):
     form = OrderStatusAdminForm
     list_display = ['name']
-    readonly_fields = ['name']
 
 admin.site.register(OrderStatus, OrderStatusAdmin)
 
