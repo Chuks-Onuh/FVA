@@ -98,7 +98,7 @@ class Menu(models.Model):
     quantity = models.IntegerField()
     dateTimeCreated = models.DateTimeField(auto_now_add=True, editable=True)
     # Relationship Fields
-    vendor = models.ForeignKey(
+    vendorId = models.ForeignKey(
         'api.Vendor',
         on_delete=models.CASCADE
     )
