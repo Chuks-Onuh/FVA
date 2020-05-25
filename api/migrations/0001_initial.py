@@ -13,10 +13,22 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('auth', '0011_update_proxy_permissions'),
-        ('api', '__first__'),
     ]
 
     operations = [
+        migrations.CreateModel(
+            name='Vendor',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('businessname', models.CharField(max_length=100)),
+                ('email', models.EmailField(max_length=254, unique=True)),
+                ('phoneNumber', phone_field.models.PhoneField(blank=True, help_text='Contact phone number', max_length=31)),
+                ('dateTimeCreated', models.DateTimeField(auto_now_add=True)),
+            ],
+            options={
+                'ordering': ('-pk',),
+            },
+        ),
         migrations.CreateModel(
             name='Customer',
             fields=[
@@ -69,19 +81,7 @@ class Migration(migrations.Migration):
                 'ordering': ('-pk',),
             },
         ),
-        migrations.CreateModel(
-            name='Vendor',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('businessname', models.CharField(max_length=100)),
-                ('email', models.EmailField(max_length=254, unique=True)),
-                ('phoneNumber', phone_field.models.PhoneField(blank=True, help_text='Contact phone number', max_length=31)),
-                ('dateTimeCreated', models.DateTimeField(auto_now_add=True)),
-            ],
-            options={
-                'ordering': ('-pk',),
-            },
-        ),
+        
         migrations.CreateModel(
             name='Order',
             fields=[
