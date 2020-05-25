@@ -135,7 +135,7 @@ class Order(models.Model):
         on_delete=models.CASCADE 
     )
     vendorId = models.ForeignKey(
-        Vendor,
+        'api.Vendor',
         on_delete=models.CASCADE
     )
     description = models.TextField(max_length=100)
@@ -210,7 +210,7 @@ class Notification(models.Model):
     
     # Relationship Fields
     subjectUser = models.ForeignKey(
-        Vendor,
+        'api.Vendor',
         on_delete = models.CASCADE
     )
     orderId = models.ForeignKey(
