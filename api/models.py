@@ -213,8 +213,8 @@ class Notification(models.Model):
         'api.Vendor',
         on_delete = models.CASCADE
     )
-    orderId = models.ForeignKey(
-        Order,
+    order = models.ForeignKey(
+        'api.Order',
         on_delete=models.CASCADE
     )
     message = models.TextField()
