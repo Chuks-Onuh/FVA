@@ -78,8 +78,8 @@ class OrderAdminForm(forms.ModelForm):
 
 class OrderAdmin(admin.ModelAdmin):
     form = OrderAdminForm
-    list_display = ['description', 'itemsOrdered', 'dateAndTimeOfOrder', 'amountDue', 
-                'amountPaid', 'amountOutstanding', 'vendorId', 'orderStatus', 'menuId']
+    list_display = ['customer', 'vendorId',  'description', 'itemsOrdered', 'dateAndTimeOfOrder', 'amountDue', 
+                'amountPaid', 'amountOutstanding', 'orderStatus', 'menuId']
 
 admin.site.register(Order, OrderAdmin)
 
