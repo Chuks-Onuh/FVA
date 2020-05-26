@@ -78,7 +78,7 @@ class MenuSerializer(serializers.ModelSerializer):
             'price', 
             'quantity', 
             'dateTimeCreated', 
-            'vendorId'
+            'vendorId',
             'isRecurring', 
             'frequencyOfReocurence', 
         )
