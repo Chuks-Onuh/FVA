@@ -99,7 +99,7 @@ class OrderSerializer(serializers.ModelSerializer):
             'amountPaid', 
             'amountOutstanding',  
             'orderStatus', 
-            'menuId', 
+            'menu', 
         )
 
 
