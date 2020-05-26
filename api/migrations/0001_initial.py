@@ -93,7 +93,7 @@ class Migration(migrations.Migration):
                 ('amountOutstanding', models.FloatField()),
                 ('orderStatus', models.IntegerField(choices=[(1, 'Pendind'), (2, 'Delivered'), (3, 'Cancelled')])),
                 ('dateAndTimeOfOrder', models.DateTimeField(auto_now_add=True)),
-                ('customerId', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.Customer')),
+                ('customer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.Customer')),
                 ('menuId', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.Menu')),
                 ('vendorId', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.Vendor')),
             ],
