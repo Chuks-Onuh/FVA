@@ -134,7 +134,7 @@ class Order(models.Model):
         'api.Customer',
         on_delete=models.CASCADE 
     )
-    vendorId = models.ForeignKey(
+    vendor = models.ForeignKey(
         'api.Vendor',
         on_delete=models.CASCADE
     )
