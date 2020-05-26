@@ -145,7 +145,7 @@ class Order(models.Model):
     amountOutstanding = models.FloatField()
     orderStatus = models.IntegerField(choices=STATUS_CHOICES)
     # Relationship Field
-    menuId = models.ForeignKey(
+    menu = models.ForeignKey(
         'api.Menu',
         on_delete=models.CASCADE
     )
