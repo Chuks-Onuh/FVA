@@ -130,7 +130,7 @@ class Order(models.Model):
     # Fields
     
     # Relationship Fields
-    customerId = models.ForeignKey(
+    customer = models.ForeignKey(
         'api.Customer',
         on_delete=models.CASCADE 
     )
@@ -139,12 +139,6 @@ class Order(models.Model):
         on_delete=models.CASCADE
     )
     description = models.TextField(max_length=100)
-    itemsOrdered = ArrayField(
-    ArrayField(
-        models.CharField(max_length=10, blank=True)
-    ),
-    size=1
-)
     itemsOrdered = ArrayField(models.CharField(max_length=50), blank=True)
     amountDue = models.FloatField()
     amountPaid = models.FloatField()
