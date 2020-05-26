@@ -1,5 +1,5 @@
-# Project Title
-  Food Vendor API (FVA)
+# Food Vendor API (FVA)
+  Food Vendor API (FVA) is and API
 # Getting Started
 ### These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 * Clone the repo to your local machine.
