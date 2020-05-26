@@ -98,10 +98,7 @@ class Menu(models.Model):
     quantity = models.IntegerField()
     dateTimeCreated = models.DateTimeField(auto_now_add=True, editable=True)
     # Relationship Fields
-    vendorId = models.ForeignKey(
-        'api.Vendor',
-        on_delete=models.CASCADE
-    )
+    vendorId = models.ForeignKey('api.Vendor',on_delete=models.CASCADE)
     isRecurring = models.BooleanField()
     frequencyOfReocurence = models.CharField(max_length=30)
 
