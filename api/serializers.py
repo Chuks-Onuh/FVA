@@ -90,7 +90,7 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = (
             'pk', 
-            'customerId',
+            'customer',
             'vendorId',
             'description', 
             'itemsOrdered', 
