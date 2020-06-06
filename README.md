@@ -10,7 +10,7 @@
 * Run python manage.py migrate to migrate the Model Tables to the database and ./manage.py runserver to run the program.
 # Deployment
 This project is deployed using Heroku server. Visit https://devcenter.heroku.com/articles/deploying-python for Heroku Django deployment flow. 
-Navigate to http://foodvendorapi.herokuapp.com/admin to login to admin panel using
+Navigate to http://foodvendorapi.herokuapp.com/ to login to admin panel using
 __testing@gmail.com__ and __password__ as username and password respectively in order to see the API endpoints of the deployed application.
 # Built With
 * Python
